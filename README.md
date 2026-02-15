@@ -2,8 +2,10 @@
 
 > 基于 Vue 3 + Flask + ResNet-101 + DeepSeek 大模型的动植物智能识别与科普系统。
 
-![项目截图](https://via.placeholder.com/800x400?text=Project+Screenshot) 
-**
+![项目截图]
+(![alt text](image-1.png))
+(![alt text](image.png)) 
+
 
 ## ✨ 功能特性
 
@@ -17,11 +19,11 @@
 
 - **前端**：Vue 3, TypeScript, Vite, Element Plus, SCSS, Axios
 - **后端**：Python Flask, PyTorch (CUDA), Edge-TTS, DuckDuckGo Search
-- **AI 模型**：ResNet-101 (TorchVision), DeepSeek-V3
+- **AI 模型**：ResNet-101 (TorchVision), DeepSeek-V3.2
 
 ## 🚀 快速开始
 
 ### 1. 克隆项目
 ```bash
-git clone https://github.com/你的用户名/你的仓库名.git
-cd 你的仓库名
+git clone https://github.com/Zbi-i/smart-nature-identifier
+cd smart-nature-identifier
