@@ -27,6 +27,7 @@
 ```bash
 git clone https://github.com/Zbi-i/smart-nature-identifier
 cd smart-nature-identifier
+```
 
 ### 2. 前端启动
 
