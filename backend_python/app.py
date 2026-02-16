@@ -166,15 +166,16 @@ def tts_generate():
     # 1. 移除 Markdown 符号 (*, #, >, `) - 不移除减号
     clean_text = re.sub(r'[*#>`]', '', text)
     
-    # 2. 移除 Emoji
-    emoji_pattern = re.compile(
-        "["
-        "\U00010000-\U0010ffff"
-        "\u2600-\u27bf"
-        "\u1f300-\u1f64f"
-        "\u1f680-\u1f6ff"
-        "]+", flags=re.UNICODE)
-    clean_text = emoji_pattern.sub('', clean_text)
+    # # 2. 移除 Emoji
+    # 注意：这个正则表达式覆盖了大部分常见的 Emoji，但会替换掉数字暂不使用
+    # emoji_pattern = re.compile(
+    #     "["
+    #     "\U00010000-\U0010ffff"
+    #     "\u2600-\u27bf"
+    #     "\u1f300-\u1f64f"c
+    #     "\u1f680-\u1f6ff"
+    #     "]+", flags=re.UNICODE)
+    # clean_text = emoji_pattern.sub('', clean_text)
     
     # 3. 移除多余空白
     clean_text = clean_text.replace('\n', ' ').strip()

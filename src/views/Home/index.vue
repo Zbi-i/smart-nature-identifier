@@ -83,7 +83,6 @@ const streamText = ref('');
 const identificationError = ref(''); // 🌟 新增：存储识别失败的幽默提示
 const resultCardRef = ref<InstanceType<typeof ResultCard> | null>(null);
 
-
 const handleExploreClick = async (item: { name: string, imageUrl: string }) => {
    // 🌟 核心修复：立即停止正在播放的语音
   resultCardRef.value?.stopVoice();
@@ -177,6 +176,7 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
     resultCardRef.value?.startVoice();
   });
 
+
   await fetchStreamWiki(
     keyword,
     isModelResult,
@@ -184,15 +184,21 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
       streamText.value += textChunk;
 
       if (scrollContainer) {
-        nextTick(() => {
-          // 使用 requestAnimationFrame 保证在高频更新下依然流畅
-          requestAnimationFrame(() => {
-            scrollContainer.scrollTo({
-              top: scrollContainer.scrollHeight,
-              behavior: 'smooth' // 使用平滑滚动
+        // 🌟 智能滚动逻辑
+        // 1. 计算用户当前距离底部的距离
+        // scrollHeight (总高) - scrollTop (已滚距离) - clientHeight (可视高度)
+        const distanceToBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight;
+        if (distanceToBottom < 150) {
+          nextTick(() => {
+            // 使用 requestAnimationFrame 保证在高频更新下依然流畅
+            requestAnimationFrame(() => {
+              scrollContainer.scrollTo({
+                top: scrollContainer.scrollHeight,
+                behavior: 'smooth' // 使用平滑滚动
+              });
             });
           });
-        });
+        }
       }
     },
     () => {
@@ -328,5 +334,7 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
   scroll-behavior: smooth;
   z-index: 1;
 }
-
+.upload-card-container {
+  margin-top: 20px;
+}
 </style>

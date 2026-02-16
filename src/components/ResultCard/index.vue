@@ -1,5 +1,5 @@
 <template>
-  <el-card v-if="visible" class="glass-card result-card" id="result-card">
+  <el-card v-if="visible" class="glass-card result-card result-card-container" id="result-card">
     <template #header>
       <div class="result-header">
         <div class="left-info">

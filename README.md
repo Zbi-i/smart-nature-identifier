@@ -1,8 +1,7 @@
 # 🌱 智物识踪 (Smart Plant & Animal Identifier)
 
-> 基于 Vue 3 + Flask + ResNet-101 + DeepSeek 大模型的动植物智能识别与科普系统。
+> 基于 Vue 3 + Flask + ResNet-101 + DeepSeek 大模型的动植物智能识别与科普系统。本项目由Gemini辅助完成。
 
-![项目截图]
 ![alt text](image-1.png)
 ![alt text](image.png)
 
@@ -25,7 +24,7 @@
 
 ### 1. 克隆项目
 ```bash
-git clone https://github.com/Zbi-i/smart-nature-identifier
+git clone https://github.com/Zbi-i/smart-nature-identifier.git
 cd smart-nature-identifier
 ```
 

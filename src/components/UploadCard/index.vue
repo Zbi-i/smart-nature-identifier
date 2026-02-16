@@ -1,5 +1,5 @@
 <template>
-  <el-card class="glass-card upload-card" shadow="never">
+  <el-card class="glass-card upload-card upload-card-container" shadow="never">
     <div class="upload-area" @click="triggerInput" :class="{ 'has-image': imgUrl }">
       <input type="file" ref="fileInput" accept="image/*" @change="onFileChange" hidden />
 
@@ -146,6 +146,9 @@ const onFileChange = (e: Event) => {
     font-weight: 600;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 12px rgba(66, 185, 131, 0.3);
+  }
+  .overlay-actions{
+    padding-top: 10px;
   }
 }
 // 🌟 流光按钮

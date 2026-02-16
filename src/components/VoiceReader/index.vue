@@ -101,7 +101,12 @@ const processDownloadQueue = async () => {
     // 只有 ID 匹配时才继续递归，否则终止旧线程
     if (thisSessionId === currentSessionId) {
       isDownloading.value = false;
-      processDownloadQueue();
+      // 补刀检查：如果下载完了，发现不需要播放了（比如刚下完最后一句），关掉状态
+      if (downloadQueue.value.length === 0 && playBuffer.value.length === 0 && !isAudioPlaying.value && !props.isGenerating) {
+          isPlaying.value = false;
+      } else if (isPlaying.value) {
+          processDownloadQueue();
+      }
     }
   }
 };
@@ -110,6 +115,10 @@ const processDownloadQueue = async () => {
 const startPlaybackThread = () => {
   if (!isPlaying.value || playBuffer.value.length === 0) {
     isAudioPlaying.value = false;
+    // 如果所有音频播完，且大模型也生成完了，说明彻底结束
+    if (!props.isGenerating && downloadQueue.value.length === 0) {
+      isPlaying.value = false; // 关掉总开关，按钮变回暂停态
+    }
     return;
   }
 
@@ -125,6 +134,7 @@ const startPlaybackThread = () => {
       if (isPlaying.value) startPlaybackThread();
     };
   }
+
 };
 
 const base64ToBlob = (base64: string, type: string) => {
