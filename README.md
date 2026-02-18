@@ -1,10 +1,10 @@
 # 🌳 万物生色 (Smart Nature Identifier)
 
 > 基于 Vue 3 + Flask + ResNet-101 + DeepSeek 大模型的动植物智能识别与科普系统。
-><span style="color: transparent;">本项目由Gemini辅助开发。</span>
+> 本项目由Gemini辅助开发。
 ![首页](./Preview/image-2.png)
 ![上传识别](./Preview/image.png)
-<video controls src="Preview/Demo video.mp4" title="Demo video"></video>
+![项目演示](./Preview/Demo%20video.gif)
 
 
 ---
