@@ -4,7 +4,7 @@
       <div class="result-header">
         <div class="left-info">
           <span class="result-name">{{ resultName }}</span>
-          <el-tag v-if="resultSource" type="warning" size="small">{{ resultSource }}</el-tag>
+          <el-tag v-if="resultSource" type="warning" size="small" class="result-source-tag">{{ resultSource }}</el-tag>
         </div>
 
         <div class="right-actions">
@@ -76,6 +76,12 @@ defineExpose({ startVoice, stopVoice });
   .voice-btn {
     box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
     &:hover { transform: scale(1.1); }
+  }
+
+  .result-source-tag {
+    // 垂直居中
+    margin-left: 12px;
+    margin-top: -12px;
   }
 }
 

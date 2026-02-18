@@ -82,6 +82,7 @@ const resultSource = ref('');
 const streamText = ref('');
 const identificationError = ref(''); // 🌟 新增：存储识别失败的幽默提示
 const resultCardRef = ref<InstanceType<typeof ResultCard> | null>(null);
+let llmAbortController: AbortController | null = null;
 
 const handleExploreClick = async (item: { name: string, imageUrl: string }) => {
    // 🌟 核心修复：立即停止正在播放的语音
@@ -89,6 +90,7 @@ const handleExploreClick = async (item: { name: string, imageUrl: string }) => {
   // 1. 更新 UI 状态
   selectedFile.value = null;
 
+  // 重置其他状态
   imgUrl.value = item.imageUrl;
   resultName.value = `正在查询 ${item.name}...`;
   resultCategory.value = '探索发现';
@@ -96,6 +98,7 @@ const handleExploreClick = async (item: { name: string, imageUrl: string }) => {
   resultScore.value = null;
   identificationError.value = '';
   streamText.value = '';
+
 
   await callLlmService(item.name, false);
 
@@ -164,6 +167,13 @@ const uploadAndIdentify = async () => {
 
 // --- 新的调用 LLM 的封装函数 ---
 const callLlmService = async (keyword: string, isModelResult: boolean) => {
+   // 🌟 1. 如果有正在进行的请求，立刻掐断！
+  if (llmAbortController) {
+    llmAbortController.abort();
+  }
+  // 🌟 2. 创建新的控制器
+  llmAbortController = new AbortController();
+
   loadingLLM.value = true;
   streamText.value = '';
   identificationError.value = '';
@@ -181,6 +191,7 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
     keyword,
     isModelResult,
     (textChunk) => {
+      if (llmAbortController?.signal.aborted) return;
       streamText.value += textChunk;
 
       if (scrollContainer) {
@@ -188,7 +199,7 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
         // 1. 计算用户当前距离底部的距离
         // scrollHeight (总高) - scrollTop (已滚距离) - clientHeight (可视高度)
         const distanceToBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight;
-        if (distanceToBottom < 150) {
+        if (distanceToBottom < 100) {
           nextTick(() => {
             // 使用 requestAnimationFrame 保证在高频更新下依然流畅
             requestAnimationFrame(() => {
@@ -202,16 +213,21 @@ const callLlmService = async (keyword: string, isModelResult: boolean) => {
       }
     },
     () => {
+      if (llmAbortController?.signal.aborted) return;
+
       loadingLLM.value = false;
       resultName.value = keyword;
       // 结束时补一次平滑滚动
       scrollContainer?.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
     },
     (error) => {
+      if (llmAbortController?.signal.aborted) return;
       loadingLLM.value = false;
       resultCardRef.value?.stopVoice();
       console.error("LLM 生成失败:", error);
-    }
+      llmAbortController = null;
+    },
+    llmAbortController.signal // 🌟 传入中断信号
   );
 };
 </script>

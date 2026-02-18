@@ -14,7 +14,8 @@ export async function fetchStreamWiki(
   isModelResult: boolean, // 🌟 新增参数：标记是否为本地模型返回的标签
   onDelta: (text: string) => void,
   onFinish: () => void,
-  onError: (error: any) => void
+  onError: (error: any) => void,
+  signal?: AbortSignal // 🌟 新增参数：接收中断信号
 ) {
   let prompt = ``;
 
@@ -35,6 +36,7 @@ export async function fetchStreamWiki(
     const response = await fetch(LLM_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${LLM_API_KEY}` },
+      signal: signal, // 将信号传给 fetch，这样调用 signal.abort() 时请求就会断开
       body: JSON.stringify({
         model: "deepseek-v3-2-251201",
         messages: [
@@ -79,7 +81,11 @@ export async function fetchStreamWiki(
         }
       }
     }
-  } catch (error) {
-    onError(error);
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      console.log('用户中断了上一条生成任务');
+    } else {
+      onError(error);
+    }
   }
 }

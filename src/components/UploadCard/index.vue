@@ -48,8 +48,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { UploadFilled, Refresh, DArrowRight, Compass } from '@element-plus/icons-vue';
-
-const props = defineProps<{
+defineProps<{
   imgUrl: string,
   isProcessing: boolean,
   hasFile: boolean // 是否有本地文件
